@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
-import { API_ROOT } from './constants.js'
+import { API_ROOT } from '../constants.js'
 import { Form, Input, Button, message } from 'antd';
 const FormItem = Form.Item;
 
