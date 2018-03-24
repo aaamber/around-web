@@ -4,7 +4,7 @@ import {Main} from './Main';
 import './App.css';
 
 class App extends Component {
-  render() {
+  render() {git
     return (
       <div className="App">
         <Header/>
