@@ -6,3 +6,4 @@ export const GEO_OPTIONS = {
   timeout           : 27000
 }
 export const POST_KEY = "POST_KEY";
+export const AUTH_PREFIX = "Bearer";
