@@ -3,6 +3,8 @@ import $ from 'jquery';
 import {API_ROOT, GEO_OPTIONS, POST_KEY, AUTH_PREFIX, TOKEN_KEY} from "../constants"
 import { Tabs, Button, Spin} from 'antd';
 import {Gallery} from "./Gallery"
+import {CreatePostButton} from "./CreatePostButton"
+
 
 const TabPane = Tabs.TabPane;
 
@@ -54,7 +56,7 @@ export class Home extends React.Component {
       return <Spin tip="Loading posts..."></Spin>
     } else {
       //console.log("start log posts")
-      console.log(this.state.posts.length);
+      //console.log(this.state.posts.length);
       if (this.state.posts && this.state.posts.length > 0) {
 
         const images = this.state.posts.map((post) => {
@@ -75,8 +77,8 @@ export class Home extends React.Component {
   }
 
   loadNearByPosts = (position)=> {
-    const lat = 37.7915953;
-    const lon = -122.3937977;
+    const lat = 37.535623;
+    const lon = -122.26956;
     this.setState({loadingPosts: true});
     $.ajax({
       url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20`,
@@ -102,7 +104,7 @@ export class Home extends React.Component {
   }
 
   render(){
-    const operations = <Button type="primary">Create New Post</Button>;
+    const operations = <CreatePostButton type="primary">Create New Post</CreatePostButton>;
     return (
       <Tabs tabBarExtraContent={operations} className="main-tabs">
         <TabPane tab="Posts" key="1">
