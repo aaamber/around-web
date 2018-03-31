@@ -1,6 +1,8 @@
 import React from 'react';
 import {Form, Input, Upload, Icon} from "antd/lib/index"
 
+
+
 const FormItem = Form.Item;
 
 class CreatePostForm extends React.Component {
@@ -10,7 +12,7 @@ class CreatePostForm extends React.Component {
     if (Array.isArray(e)) {
       return e;
     }
-    return e && e.fileList;
+    return e && e.fileList; // Boolean(e) ? e.fileList : e; if e exist, return e.fileList not a boolean
   }
 
   beforeUpload = () => {
@@ -18,7 +20,7 @@ class CreatePostForm extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form; // a high order function that can return a high order function
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
@@ -60,3 +62,4 @@ class CreatePostForm extends React.Component {
 }
 
 export const WrapperCreatePostForm = Form.create()(CreatePostForm);
+// this.post.form is a prop of WrapperCreatePost

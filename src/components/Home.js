@@ -21,7 +21,7 @@ export class Home extends React.Component {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         this.onSuccessGetGeoLocation,
-        this.onSuccessGetGeoLocation,
+        this.onFailedGeoLocation,
         GEO_OPTIONS
       );
     } else {
@@ -31,15 +31,8 @@ export class Home extends React.Component {
 
   onSuccessGetGeoLocation = (position) => {
     this.setState({loadingGeoLocation: false, error: ''});
-
-    console.log(position);
-    // const {latitude,longtitude}  = position.coords;
-    // localStorage.setItem(POST_KEY, JSON.stringify({lat: latitude, lon: longtitude}));
-    //
-    //
-    const lat = 37.7915953;
-    const lon = -122.3937977;
-    localStorage.setItem(POST_KEY, JSON.stringify({lat, lon}));
+    const { latitude, longitude } = position.coords;
+    localStorage.setItem(POST_KEY, JSON.stringify({lat: latitude, lon: longitude}));
     this.loadNearByPosts(position);
   }
   onFailedGeoLocation = (error) => {
@@ -47,7 +40,7 @@ export class Home extends React.Component {
     console.log(error);
   }
 
-  getGalleryPanelConetent = () => {
+  getGalleryPanelContent = () => {
     if (this.state.error) {
       return <div>{this.state.error}</div>
     } else if (this.state.loadingGeoLocation) {
@@ -55,8 +48,7 @@ export class Home extends React.Component {
     } else if (this.state.loadingPosts){
       return <Spin tip="Loading posts..."></Spin>
     } else {
-      //console.log("start log posts")
-      //console.log(this.state.posts.length);
+
       if (this.state.posts && this.state.posts.length > 0) {
 
         const images = this.state.posts.map((post) => {
@@ -77,10 +69,13 @@ export class Home extends React.Component {
   }
 
   loadNearByPosts = (position)=> {
-    const lat = 37.535623;
-    const lon = -122.26956;
+    // const lat = 37.535623;
+    // const lon = -122.26956;
+    const { lat, lon } = JSON.parse(localStorage.getItem(POST_KEY));
+
     this.setState({loadingPosts: true});
-    $.ajax({
+    // return a promise so that it can be used in createPostButton
+    return $.ajax({
       url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20`,
       method: 'GET',
       headers: {
@@ -104,11 +99,11 @@ export class Home extends React.Component {
   }
 
   render(){
-    const operations = <CreatePostButton type="primary">Create New Post</CreatePostButton>;
+    const operations = <CreatePostButton type="primary" loadNearByPosts={this.loadNearByPosts}>Create New Post</CreatePostButton>;
     return (
       <Tabs tabBarExtraContent={operations} className="main-tabs">
         <TabPane tab="Posts" key="1">
-          {this.getGalleryPanelConetent()}
+          {this.getGalleryPanelContent()}
         </TabPane>
         <TabPane tab="Map" key="2">Content of tab 2</TabPane>
       </Tabs>
