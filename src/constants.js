@@ -7,3 +7,4 @@ export const GEO_OPTIONS = {
 }
 export const POST_KEY = "POST_KEY";
 export const AUTH_PREFIX = "Bearer";
+export const LOC_SHAKE = 0.02;

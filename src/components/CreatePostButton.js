@@ -2,7 +2,7 @@ import React from 'react';
 import {WrapperCreatePostForm} from "./CreatePostForm"
 import { Modal, Button, message} from 'antd';
 import $ from 'jquery';
-import {API_ROOT, AUTH_PREFIX, TOKEN_KEY,POST_KEY } from "../constants"
+import {API_ROOT, AUTH_PREFIX, TOKEN_KEY,POST_KEY, LOC_SHAKE } from "../constants"
 
 export class CreatePostButton extends React.Component {
   state = {
@@ -22,8 +22,8 @@ export class CreatePostButton extends React.Component {
 
         const { lat, lon } = JSON.parse(localStorage.getItem(POST_KEY)); // string to json object
         const formData = new FormData();
-        formData.set('lat', lat);
-        formData.set('lon', lon);
+        formData.set('lat', lat + Math.random() * LOC_SHAKE * 2 - LOC_SHAKE);
+        formData.set('lon', lon + Math.random() * LOC_SHAKE * 2 - LOC_SHAKE);
         formData.set('message', values.message);
         formData.set('image', values.image[0]);
 
@@ -38,6 +38,7 @@ export class CreatePostButton extends React.Component {
           contentType: false,
           dataType: 'text',
         }).then(()=>{
+          this.form.resetFields();
           message.success('created a post');
           this.setState({
             visible: false,
@@ -48,6 +49,7 @@ export class CreatePostButton extends React.Component {
           });
           // if return  a promise here, chained then() will wait the current promis
         }, (response)=>{
+          this.form.resetFields();
           console.log(response.responseText);
         }).catch((error)=>{
           console.log(error);
