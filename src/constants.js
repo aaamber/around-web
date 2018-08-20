@@ -1,4 +1,4 @@
-export const API_ROOT = 'https://around-75015.appspot.com';
+export const API_ROOT = 'https://long-nation-194922.appspot.com';
 export const TOKEN_KEY = 'TOKEN_KEY';
 export const GEO_OPTIONS = {
   enableHighAccuracy: true,

@@ -8,6 +8,7 @@ import {WrappedAroundMap} from "./AroundMap"
 
 const TabPane = Tabs.TabPane;
 
+
 export class Home extends React.Component {
 
   state = {
@@ -21,7 +22,7 @@ export class Home extends React.Component {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         this.onSuccessGetGeoLocation,
-        this.onSuccessGetGeoLocation,
+        this.onFailedGeoLocation,
         GEO_OPTIONS
       );
     } else {
@@ -33,16 +34,13 @@ export class Home extends React.Component {
     console.log(position);
     this.setState({loadingGeoLocation: false, error: ''});
 
-    const lat = 37.535623;
-    const lon = -122.26956;
-    //const { latitude: lat, longitude: lon } = position.coords;
+    //const lat = 37.535623;
+    //const lon = -122.26956;
+    const { latitude: lat, longitude: lon } = position.coords;
     const location = { lat: lat, lon: lon };
     localStorage.setItem(POST_KEY, JSON.stringify(location));
 
-    // const { latitude, longitude } = position.coords;
-    // localStorage.setItem(POST_KEY, JSON.stringify({lat: latitude, lon: longitude}));
-    // console.log(position);
-    this.loadNearByPosts(position);
+    this.loadNearByPosts(location);
   }
   onFailedGeoLocation = (error) => {
     this.setState({loadingGeoLocation: false, error: 'failed to load geolocation'});
@@ -77,15 +75,13 @@ export class Home extends React.Component {
     }
   }
 
-  loadNearByPosts = (location)=> {
-    const lat = 37.535623;
-    const lon = -122.26956;
-    //const { lat, lon } = location ? location : JSON.parse(localStorage.getItem(POST_KEY));
-
+  loadNearByPosts = (location, range)=> {
+    const { lat, lon } = location ? location : JSON.parse(localStorage.getItem(POST_KEY));
+    const radius = range ? range : 20;
     this.setState({loadingPosts: true});
     // return a promise so that it can be used in createPostButton
     return $.ajax({
-      url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20`,
+      url: `${API_ROOT}/search?lat=${lat}&lon=${lon}&range=${radius}`,
       method: 'GET',
       headers: {
         Authorization: `${AUTH_PREFIX} ${localStorage.getItem(TOKEN_KEY)}`
@@ -115,11 +111,13 @@ export class Home extends React.Component {
           {this.getGalleryPanelContent()}
         </TabPane>
         <TabPane tab="Map" key="2"><WrappedAroundMap
-          googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
+
+          googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyB86hB8rPNndtWYzDTFo0gyqz8XlXGSGY4&v=3.exp&libraries=geometry,drawing,places"
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `400px` }} />}
           mapElement={<div style={{ height: `100%` }} />}
           posts={this.state.posts}
+          loadNearByPosts={this.loadNearByPosts}
         /></TabPane>
       </Tabs>
     );

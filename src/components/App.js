@@ -19,6 +19,10 @@ class App extends Component {
     localStorage.removeItem(TOKEN_KEY);
   }
 
+  componentDidMount() {
+    window.onbeforeunload = this.handleLogout.bind(this);
+  }
+
   render() {
     return (
       <div className="App">
