@@ -1,4 +1,4 @@
-import React from 'react';
+n bimport React from 'react';
 import {Form, Input, Upload, Icon} from "antd/lib/index"
 
 
